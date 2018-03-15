@@ -1,0 +1,139 @@
+<!DOCTYPE html>  
+<html>  
+    <head>  
+        <meta charset="UTF-8">  
+        <title></title>  
+        <style type="text/css">  
+            *{  
+                margin: 0;  
+                padding: 0;  
+            }  
+            .btn{  
+                margin:20px 0 20px 50px;  
+            }  
+            table{  
+                border-collapse: collapse;  
+                width:200px;  
+            }  
+            table thead th{  
+                height:30px;  
+                width:50px;  
+                border: 1px solid #000;  
+            }  
+            table tbody tr td{  
+                height:30px;  
+                width:50px;  
+                border: 1px solid #000;  
+                text-align: center;  
+            }  
+            .loading{  
+                width:200px;  
+                margin-top: 20px;  
+                text-align: center;  
+                display: none;  
+            }  
+        </style>  
+    </head>  
+        <div class="oDiv">  
+            <button class="getData btn">获取数据</button>  
+            <table>  
+                <thead>  
+                    <th>序号</th>  
+                    <th>姓名</th>  
+                    <th>年龄</th>  
+                    <th>城市</th>  
+                </thead>  
+                <tbody id="tbody">  
+                    <!--<tr>  
+                        <td>1</td>  
+                        <td>2</td>  
+                        <td>3</td>  
+                    </tr>-->  
+                </tbody>  
+            </table>  
+            <div class="loading">  
+                Loading  
+            </div>  
+        </div>  
+    <body>  
+    </body>  
+    <script src="jquery.js" type="text/javascript" charset="utf-8"></script>  
+    <script type="text/javascript">  
+        $(document).ready(function(){  
+
+			// 所有ajax请求的通用前置filter
+			var pendingRequests = {};    
+			$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+				var key = options.url;	
+				if (!pendingRequests[key] && key.indexOf('.html') == -1) {
+					pendingRequests[key] = jqXHR;
+				} else if(key.indexOf('.html') == -1){
+					jqXHR.abort();	// 放弃后触发的重复提交
+					//pendingRequests[key].abort();	// 放弃先触发的提交
+				}
+
+				var complete = options.complete;
+				options.complete = function(jqXHR, textStatus) {
+					pendingRequests[key] = null;
+					if ($.isFunction(complete)) {
+						complete.apply(this, arguments);
+					}
+				};
+			});
+              
+            $('.getData').ajaxStart(function(){  
+				console.log('ajaxStart');
+                $(".loading").css("display","block");  
+                $("btn").removeClass("getData"); 
+            });  
+              
+            $('.getData').ajaxComplete(function(){  
+			  console.log('ajaxComplete');
+                $(".loading").css("display","none");  
+               $("btn").addClass("getData"); 
+            })  
+            //用alert是为了禁止后面代码的执行，比较清楚的看到执行步骤  
+            /*** button点击事件触发顺序：  
+             * 1、先触发ajaxStart事件，弹框先弹出1;  
+             * 2、点击弹框的确定后，button发出ajax请求但是还没获取到数据，会触发弹框2但是Loading会处于block状态  
+             * 3、弹框2执行后，加载数据完成，Loading处于none状态  
+             *   
+             ***/  
+            $('.getData').on('click',function(){  
+
+                $.ajax({  
+                    type:"get",  
+                    url:"mock.json",  
+                    async:true,  
+                    dataType:"json",  
+                    success:function(res){  
+					
+						 window.setTimeout(
+						 function(){ 
+								console.log("sucess"+res)  
+								var len = res.data.length;  
+								var ht = '';  
+								$.each(res.data, function(i,n) {  
+									ht += '<tr id="'+(i+1)+'">'+  
+												'<td>'+(i+1)+'</td>'+  
+												'<td>'+n.name+'</td>'+  
+												'<td>'+n.age+'</td>'+  
+												'<td>'+n.city+'</td>'+  
+											'</tr>';  
+								});  
+								$("#tbody").html(ht);  
+						 },
+						 3000); 
+                       
+                    }  
+                });  
+				
+             });  
+			 
+       });  
+  
+  
+  
+			
+    </script>  
+</html>  
