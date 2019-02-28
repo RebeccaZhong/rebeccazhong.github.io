@@ -129,5 +129,5 @@ NamedParameterJdbcTemplate的query方法，本身就支持in查询，此处不�
 ## 总结
 NamedParameterJdbcTemplate的使用好处：如果参数比较多，并且参数位置或顺序可能变化的情况下，使用NamedParameterJdbcTemplate是非常方便的！
 
-参考资料
+**参考资料**
 [详解jdbcTemplate和namedParameterJdbcTemplate](https://www.jianshu.com/p/1bdc0e26a7e4)
