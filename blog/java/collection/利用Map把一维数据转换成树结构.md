@@ -11,28 +11,35 @@ import java.util.List;
 import java.util.Map;
 
 public class AssmTreeUtil {
+	/**
+	* 组装树结构数据方法
+	*/
 	public static List<TreeNode> assmTree(List<TreeNode> singleTreeNodes) {
+		// 判断排序数据是否为空
 		if(singleTreeNodes == null || singleTreeNodes.isEmpty()) {
 			return null;
 		}
-
-		List<TreeNode> nodeTrees = new ArrayList<TreeNode>();
-		Map<String,TreeNode> treeMap = new LinkedHashMap<String,TreeNode>();
+		// 用有序Map把传参组装起来
+		Map<String,TreeNode> nodeId2treeNodes = new LinkedHashMap<String,TreeNode>();
 		for(TreeNode node : singleTreeNodes){
 			TreeNode treeNode = new TreeNode();
 			treeNode.setNodeId(node.getNodeId());
 			treeNode.setNodeName(node.getNodeName());
 			treeNode.setPid(node.getPid());
-			treeMap.put(node.getNodeId(), treeNode);
+			nodeId2treeNodes.put(node.getNodeId(), treeNode);
 		}
-		for(String nodeId : treeMap.keySet()){
-			TreeNode treeNode = treeMap.get(nodeId);
+		// 用来保存组装好的数据, 作为返回值
+		List<TreeNode> nodeTrees = new ArrayList<TreeNode>();
+		// 遍历组装好的有序Map
+		for(String nodeId : nodeId2treeNodes.keySet()){
+			TreeNode treeNode = nodeId2treeNodes.get(nodeId);
 			String pid = treeNode.getPid();
-			if(pid==null || pid.length()==0 || !treeMap.containsKey(pid)){
+			// 如果父节点为空或 没有以此父节点???
+			if(pid==null || pid.length()==0 || !nodeId2treeNodes.containsKey(pid)){
 				treeNode.setPid("");
 				nodeTrees.add(treeNode);
 			}else{
-				TreeNode parentTreeNode = treeMap.get(pid);
+				TreeNode parentTreeNode = nodeId2treeNodes.get(pid);
 				if(parentTreeNode.getChildren()==null){
 					parentTreeNode.setChildren(new ArrayList<TreeNode>());
 				}
@@ -44,7 +51,7 @@ public class AssmTreeUtil {
 }
 ```
 
-bean类：
+TreeNode bean类：
 ```java
 import java.util.List;
 
