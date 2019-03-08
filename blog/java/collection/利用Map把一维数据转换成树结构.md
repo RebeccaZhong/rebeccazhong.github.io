@@ -1,9 +1,6 @@
-待改进：
-1. 前面加一段文字，介绍一下这篇博客是干什么的
-2. 代码要有注释
-3. 简要说明一下你的实现逻辑 有必要画图
+#### 利用有序Map把一维数据转换为树结构的方法
 
-工具类：
+转换为树结构的工具类：
 ```Java
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -12,7 +9,7 @@ import java.util.Map;
 
 public class AssmTreeUtil {
 	/**
-	* 组装树结构数据方法
+	* 组装树结构数据的方法
 	*/
 	public static List<TreeNode> assmTree(List<TreeNode> singleTreeNodes) {
 		// 判断排序数据是否为空
@@ -29,16 +26,17 @@ public class AssmTreeUtil {
 			nodeId2treeNodes.put(node.getNodeId(), treeNode);
 		}
 		// 用来保存组装好的数据, 作为返回值
-		List<TreeNode> nodeTrees = new ArrayList<TreeNode>();
-		// 遍历组装好的有序Map
+		List<TreeNode> topNodeTrees = new ArrayList<TreeNode>();
+		// 遍历所有节点
 		for(String nodeId : nodeId2treeNodes.keySet()){
 			TreeNode treeNode = nodeId2treeNodes.get(nodeId);
 			String pid = treeNode.getPid();
-			// 如果父节点为空或 没有以此父节点???
+			// 当前节点的父id为空 或 整个列表中没有以此父id作为自己的id的情况
+			// 即当前节点是根节点
 			if(pid==null || pid.length()==0 || !nodeId2treeNodes.containsKey(pid)){
-				treeNode.setPid("");
-				nodeTrees.add(treeNode);
-			}else{
+				// treeNode.setPid(""); // 此处可以根据需要调整父id的值
+				topNodeTrees.add(treeNode);
+			}else{ // 不是父节点, 作为子节点添加进去
 				TreeNode parentTreeNode = nodeId2treeNodes.get(pid);
 				if(parentTreeNode.getChildren()==null){
 					parentTreeNode.setChildren(new ArrayList<TreeNode>());
@@ -46,7 +44,7 @@ public class AssmTreeUtil {
 				parentTreeNode.getChildren().add(treeNode);
 			}
 		}
-		return nodeTrees;
+		return topNodeTrees;
 	}
 }
 ```
@@ -96,9 +94,70 @@ public class TreeNode {
 	public void setChildren(List<TreeNode> children) {
 		this.children = children;
 	}
-
 }
 ```
 
+测试：
+```Java
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 测试组装树结构方法
+ * @Author: Rebecca Zhong
+ * @Description:
+ * @Date: Created in 2019/3/7 10:31
+ * @Modified By:
+ */
+public class Test {
+    public static void main(String[] args) {
+        List<TreeNode> singleNodes = new ArrayList<TreeNode>();
+        singleNodes.add(new TreeNode("a","1","节点1"));
+        singleNodes.add(new TreeNode("b","2","节点2"));
+        singleNodes.add(new TreeNode("c","3","节点3"));
+        singleNodes.add(new TreeNode("1","4","节点1-1"));
+        singleNodes.add(new TreeNode("2","5","节点2-1"));
+        singleNodes.add(new TreeNode("1","6","节点1-3"));
+        singleNodes.add(new TreeNode("1","7","节点1-2"));
+        singleNodes.add(new TreeNode("2","8","节点2-2"));
+        List<TreeNode> treeNodes = AssmTreeUtil.assmTree(singleNodes);
+        outputResult(treeNodes);
+    }
+
+    private static void outputResult(List<TreeNode> treeNodes) {
+        for (TreeNode treeNode : treeNodes) {
+            System.out.println("nodeId: " + treeNode.getNodeId() + "; pid: " + treeNode.getPid() + "; name: "+treeNode.getNodeName());
+            List<TreeNode> childrenNode = treeNode.getChildren();
+            if (childrenNode != null) {
+                outputResult(childrenNode);
+            }
+        }
+    }
+}
+```
+
+期望结果：
+1. 节点1
+  1.1 节点1-1
+	1.2 节点1-3
+	1.3 节点1-2
+2. 节点2
+  2.1 节点2-1
+	2.2 节点2-2
+3. 节点3
+
+输出结果：
+```Text
+nodeId: 1; pid: a; name: 节点1
+nodeId: 4; pid: 1; name: 节点1-1
+nodeId: 6; pid: 1; name: 节点1-3
+nodeId: 7; pid: 1; name: 节点1-2
+nodeId: 2; pid: b; name: 节点2
+nodeId: 5; pid: 2; name: 节点2-1
+nodeId: 8; pid: 2; name: 节点2-2
+nodeId: 3; pid: c; name: 节点3
+```
+
 **小结：**
-实现相关功能的，也有其它例子，但都是用多个ArrayList的，代码比较长。利用LinkedHashMap能更好的实现。
+利用ArrayList也可以实现相关功能，但代码整体较长，不利于维护。
+利用LinkedHashMap代码更简洁一些。
