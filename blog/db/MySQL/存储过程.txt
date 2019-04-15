@@ -1,0 +1,144 @@
+CREATE TABLE TEST_A (
+`ID`  int(10) NOT NULL ,
+`PID`  int(10) NOT NULL 
+);
+create table tb(Id int(10) NOT NULL , ParentId int(10) NOT NULL, Name varchar(5));
+
+INSERT INTO TEST_A
+VALUES(1,0);
+COMMIT; 
+INSERT INTO TEST_A
+VALUES(2,1);
+COMMIT; 
+INSERT INTO TEST_A
+VALUES(3,1);
+COMMIT; 
+INSERT INTO TEST_A
+VALUES(4,2);
+COMMIT; 
+INSERT INTO TEST_A
+VALUES(5,2);
+COMMIT; 
+INSERT INTO TEST_A
+VALUES(6,3);
+COMMIT; 
+INSERT INTO TEST_A
+VALUES(7,4);
+COMMIT; 
+INSERT INTO TEST_A
+VALUES(8,5);
+COMMIT;
+
+insert into tb VALUES (1, 0, 'a1'); 
+insert into tb VALUES (2,2, 'a2') ;
+insert into tb VALUES (14, 1, 'b11') ;
+insert into tb VALUES (15, 1, 'b12') ;
+insert into tb VALUES (16, 14, 'c13') ;
+insert into tb VALUES (17, 14, 'c14');
+insert into tb VALUES (104,17,'d15');
+COMMIT;
+
+SELECT root.id, root.parentid, root.name
+      FROM tb root
+      WHERE id=1
+      UNION ALL
+      SELECT sub.id, sub.parentid, sub.name
+      FROM tb sub, temptab super
+      WHERE sub.parentid = super.id
+
+
+SELECT temptab.id, temptab.parentid, temptab.name 
+from 
+   (
+			SELECT root.id, root.parentid, root.name
+      FROM tb root
+      WHERE id=1
+      UNION ALL
+      SELECT sub.id, sub.parentid, sub.name
+      FROM tb sub, temptab super
+      WHERE sub.parentid = super.id
+	) AS temptab
+	delete from tb where id in(
+		select id from temptab
+	);
+
+delimiter //
+
+
+create table treeNodes
+(
+ id int primary key,
+ nodename varchar(20),
+ pid int
+);
+insert into treeNodes VALUES 
+(1, 'A', 0),
+(2, 'B', 1),
+(3, 'C', 1),
+(4, 'D', 2),
+(5, 'E', 2),
+(6, 'F', 3),
+(7, 'G', 6),
+(8, 'H', 0),
+(9, 'I', 8),
+(10, 'J', 8),
+(11, 'K', 8),
+(12, 'L', 9),
+(13, 'M', 9),
+(14, 'N', 12),
+(15, 'O', 12),
+(16, 'P', 15),
+(17, 'Q', 15);
+
+/*1 | A        |    0 |
+|  2 | B        |    1 |
+|  3 | C        |    1 |
+|  4 | D        |    2 |
+|  5 | E        |    2 |
+|  6 | F        |    3 |
+|  7 | G        |    6 |
+|  8 | H        |    0 |
+|  9 | I        |    8 |
+| 10 | J        |    8 |
+| 11 | K        |    8 |
+| 12 | L        |    9 |
+| 13 | M        |    9 |
+| 14 | N        |   12 |
+| 15 | O        |   12 |
+| 16 | P        |   15 |
+| 17 | Q        |   15*/
+
+delimiter //
+
+drop PROCEDURE IF EXISTS  showTreeNodes_yongyupost2000//
+
+CREATE PROCEDURE showTreeNodes_yongyupost2000 (IN tablename VARCHAR(255),IN rootid INT)
+BEGIN
+ DECLARE Level int ;
+ drop TABLE IF EXISTS tablename;
+ CREATE TABLE tablename (
+  id int,
+  nLevel int,
+  sCort varchar(8000)
+ );
+ 
+ Set Level=0 ;
+ INSERT into tablename SELECT id,Level,ID FROM treeNodes WHERE PID=rootid;
+ WHILE ROW_COUNT()>0 DO
+  SET Level=Level+1 ;
+  INSERT into tablename 
+   SELECT A.ID,Level,concat(B.sCort,A.ID) FROM treeNodes A,tablename B 
+    WHERE  A.PID=B.ID AND B.nLevel=Level-1  ;
+ END WHILE;
+  
+END;
+//
+
+delimiter ;
+
+CALL showTreeNodes_yongyupost2000('temp',1);
+
+SELECT concat(SPACE(B.nLevel*2),'+--',A.nodename)
+FROM treeNodes A,tmpLst B 
+WHERE A.ID=B.ID 
+ORDER BY B.sCort;
