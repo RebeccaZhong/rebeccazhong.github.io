@@ -81,4 +81,6 @@ Redo、Undo、Checkpoint
 
 [MySQL高级 之 事务（ACID特性 与 隔离级别）](https://blog.csdn.net/wuseyukui/article/details/73549514)
 
+[MySQL数据库高级（七）——事务和锁](https://blog.51cto.com/9291927/2096680)
+
 [google搜索地址](https://www.google.com.hk/search?safe=strict&hl=zh-CN&ei=nCW0XP3CJ9XQ-gSY66V4&q=mysql+事务的特性和事务的隔离级别&oq=mysql+事务的特性和事务的隔离级别)
