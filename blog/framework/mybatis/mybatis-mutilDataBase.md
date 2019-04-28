@@ -237,10 +237,8 @@ applicationContext.xml配置好后，直接在指定的包内编码即可。
 
 ```
 
-自定义实现SqlSessionFactoryBean，以支持mapperLocations的通配符配置
-PackagesSqlSessionFactoryBean, DynamicDataSource, 切面注解 DataSourceAspect
-
 2. applicationContext.xml中用到的相关类
+
 - DataSource 注解
 ```java
 package com.rebecca.mybatismutildb.db;
@@ -384,7 +382,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 }
 ```
 
-- PackagesSqlSessionFactoryBean 类
+- PackagesSqlSessionFactoryBean 类 （自定义实现SqlSessionFactoryBean，以支持mapperLocations的通配符配置）
 
 ```java
 package com.rebecca.mybatismutildb.db;
