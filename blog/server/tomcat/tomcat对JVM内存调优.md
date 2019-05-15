@@ -1,4 +1,4 @@
-tomcat对JVM内存调优
+Tomcat对JVM内存调优
 
 ---
 
@@ -35,6 +35,7 @@ tomcat对JVM内存调优
 |`-server` | 一定要作为第一个参数，在多个CPU时性能佳
 |`-Xms` | java Heap初始大小。 默认是物理内存的1/64。
 |`-Xmx` | java heap最大值。建议均设为物理内存的一半。不可超过物理内存。
+|`-Xmn` | young generation的heap大小，一般设置为Xmx的3、4分之一
 |`-XX:PermSize` | 设定内存的永久保存区初始大小，缺省值为64M。
 |`-XX:MaxPermSize` | 设定内存的永久保存区最大 大小，缺省值为64M。
 |`-XX:SurvivorRatio=2` | 生还者池的大小,默认是2，如果垃圾回收变成了瓶颈，您可以尝试定制生成池设置
@@ -44,7 +45,6 @@ tomcat对JVM内存调优
 |`-Xss` | 每个线程的Stack大小，“-Xss 15120” 这使得JBoss每增加一个线程（thread)就会立即消耗15M内存，而最佳值应该是128K,默认值好像是512k.
 |`-verbose:gc` | 现实垃圾收集信息
 |`-Xloggc:gc.log` | 指定垃圾收集日志文件
-|`-Xmn` | young generation的heap大小，一般设置为Xmx的3、4分之一
 |`-XX:+UseParNewGC` |  缩短minor收集的时间
 |`-XX:+UseConcMarkSweepGC` | 缩短major收集的时间 此选项在Heap Size 比较大而且Major收集时间较长的情况下使用更合适。
 |`-XX:userParNewGC` | 可用来设置并行收集【多核CPU】
@@ -69,7 +69,7 @@ JAVA_OPTS="-server -Xms1024m -Xmx8192m -XX:PermSize=256M -XX:MaxPermSize=1024m -
 
 一般说来，你应该使用物理内存的 80% 作为堆大小。当增加处理器时，记得增加内存，因为分配可以并行进行，而垃圾收集不是并行的。
 
-**PS:** 下面是我的IDEA对JVM调优之后的配置：
+**PS:** 下面是我的IDEA对Java开发调优之后的配置：
 ```
 -Xms2048m
 -Xmx3072m
