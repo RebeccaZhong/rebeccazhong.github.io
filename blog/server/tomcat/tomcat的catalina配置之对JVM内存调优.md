@@ -45,11 +45,16 @@ Tomcat的catalina配置之对JVM内存调优
 |`-Xss` | 每个线程的Stack大小，“-Xss 15120” 这使得JBoss每增加一个线程（thread)就会立即消耗15M内存，而最佳值应该是128K,默认值好像是512k.
 |`-verbose:gc` | 现实垃圾收集信息
 |`-Xloggc:gc.log` | 指定垃圾收集日志文件
-|`-XX:+UseParNewGC` |  缩短minor收集的时间
-|`-XX:+UseConcMarkSweepGC` | 缩短major收集的时间 此选项在Heap Size 比较大而且Major收集时间较长的情况下使用更合适。
 |`-XX:userParNewGC` | 可用来设置并行收集【多核CPU】
-|`-XX:ParallelGCThreads` | 可用来增加并行度【多核CPU】
-|`-XX:UseParallelGC` | 设置后可以使用并行清除收集器【多核CPU】
+|`-XX:+UseSerialGC` | 在新生代和老年代使用串行收集器
+|`-XX:+UseParNewGC` | 在新生代使用并行收集器，缩短minor收集的时间
+|`-XX:+UseParallelGC ` | 新生代使用并行回收收集器，更加关注吞吐量【多核CPU】
+|`-XX:+UseParallelOldGC` | 老年代使用并行回收收集器
+|`-XX:ParallelGCThreads` | 设置用于垃圾回收的线程数【多核CPU】
+|`-XX:+UseConcMarkSweepGC` | 新生代使用并行收集器，老年代使用CMS+串行收集器
+|`-XX:ParallelCMSThreads` | 设定CMS的线程数量
+|`-XX:+UseG1GC` | 启用G1垃圾回收器
+
 
 具体在`tomcat`的 catalina 的文件中进行配置：
 ```
@@ -95,3 +100,4 @@ JAVA_OPTS="-server -Xms1024m -Xmx8192m -XX:PermSize=256M -XX:MaxPermSize=1024m -
 
 - [tomcat内存配置及配置参数详解](https://www.cnblogs.com/oskyhg/p/6549877.html)
 - [内存溢出之Tomcat内存配置](https://blog.csdn.net/crazy_kis/article/details/7535932)
+- [Java GC机制](https://mp.weixin.qq.com/s?__biz=MzIzMzgxOTQ5NA==&mid=2247487429&idx=1&sn=0f0c8be86147087699aebe867050bef3&chksm=e8fe93ccdf891adaf946e85bad519087f419316301f3a9a09177c220c439b17bb87f448cf710&scene=0&xtrack=1&key=6049ea3782f5de54a2942de60bbb9c62385bc09676d597d371b0a1e968b76b699cecdea2dc2dc33eda030de7e32a30f3273f52871ddd3cad251510a1c0840787b752028f04da0c46acb49623207f7939&ascene=1&uin=MzA1NzE3NzgwNA%3D%3D&devicetype=Windows+7&version=6206081a&lang=zh_CN&pass_ticket=QNdCi7mI1dbqdM7P2IXbZps%2FIisQrKq4FqQJbwaSO04pamC1mAN5DiFtmXIdxT%2F8)
