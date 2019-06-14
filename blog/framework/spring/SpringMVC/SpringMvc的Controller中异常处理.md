@@ -1,5 +1,18 @@
 <!-- SpringMvc的Controller中异常处理 -->
 
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Spring中默认的异常处理](#spring中默认的异常处理)
+- [使用`@ResponseStatus`处理自定义异常](#使用responsestatus处理自定义异常)
+- [使用`try {…} catch` 手动捕获异常](#使用try-catch-手动捕获异常)
+- [使用`@ExceptionHandler`处理自定义异常](#使用exceptionhandler处理自定义异常)
+- [使用`@ControllerAdvice`注解处理所有的异常](#使用controlleradvice注解处理所有的异常)
+- [总结](#总结)
+- [参考](#参考)
+
+<!-- /TOC -->
+
+
 # Spring中默认的异常处理
 
 在Spring中，有一些异常会默认映射为HTTP状态码，不需要程序处理。下表列出Spring的默认处理异常：
@@ -19,7 +32,7 @@ MissingServletRequestPartException | 400 - Bad Request
 NoSuchRequestHandlingMethodException | 404 - Not Found
 TypeMismatchException | 400 - Bad Request
 
-上表中的异常一般会由Spring自身抛出，如果`DispatcherServlet`处理过程中或执行校验时出现问题时则直接返回。例如，如果`DispatcherServlet`无法找到适合处理请求的控制器方法，那么将会抛出`NoSuchRequestHandlingMethodException`异常，最终的结果就是产生404状态码的响应（Not Found）。
+上表中的异常会由Spring自身抛出，如果`DispatcherServlet`处理过程中或执行校验时出现问题时则直接返回。例如，如果`DispatcherServlet`无法找到适合处理请求的控制器方法，那么将会抛出`NoSuchRequestHandlingMethodException`异常，最终的结果就是产生404状态码的响应（Not Found）。
 
 # 使用`@ResponseStatus`处理自定义异常
 
@@ -48,7 +61,7 @@ public class NullOrgException extends RuntimeException {
 ```
 
 
-# 使用try {…} catch 手动捕获异常
+# 使用`try {…} catch` 手动捕获异常
 
 定义了上述异常后，只要应用程序中有抛出`NullOrgException`异常，就会被捕获并映射为对应的状态码。那么如果程序不仅仅需要状态码，还要包含所产生的错误，那该怎么办呢？此时的话，我们就不能将异常视为HTTP错误了，而是要按照处理请求的方式来处理异常了。
 
