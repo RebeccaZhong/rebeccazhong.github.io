@@ -1,5 +1,18 @@
-<!-- 多线程之ThreadPoolExecutor和ForkJoinPool的用法 -->
+<!-- Java多线程之ThreadPoolExecutor和ForkJoinPool的用法 -->
 
+**目录**
+
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [场景](#场景)
+- [单线程实现](#单线程实现)
+- [多线程实现-`ExecutorService`](#多线程实现-`ExecutorService`)
+- [多线程实现-`ForkJoinPool`](#多线程实现-`ForkJoinPool`)
+- [测试](#测试)
+- [总结](#总结)
+- [参考链接](#参考链接)
+
+<!-- /TOC -->
 
 在平时的工作中，当遇到数据量比较大、程序运行较慢，需要提升程序性能时，一般会涉及到多线程。有些小伙伴对多线程的用法不是很清楚，本文主要说明一下 `ThreadPoolExecutor` 和 `ForkJoinPool` 的用法。
 
@@ -182,7 +195,7 @@ public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
 
 第2组（非核心线程销毁时间相关的）：
 1. keepAliveTime: 非核心线程的销毁时间。非核心线程不可能一直在线程池中占用资源，所以需要销毁
-2. unit: 销毁的时间单位。可以为`TimeUnit`中的枚举类型
+2. unit: 销毁的时间单位。值为`TimeUnit`中的枚举类型
 
 第3组（线程池处理数据相关的）：
 1. workQueue: 线程处理数据的方式。一般用JDK提供的`ArrayBlockingQueue`(数组)和`LinkedBlockingDeque`(链表)
@@ -216,7 +229,7 @@ public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize,
 
 # 多线程实现-`ForkJoinPool`
 
-我们用求和的例子来模拟偷任务。
+我们还是用求和的例子来模拟偷任务。
 
 ```java
 package mutilthread;
@@ -295,7 +308,7 @@ public class MutilThreadOfForkJoinPool implements Calculator {
 }
 ```
 
-`RecursiveTask`的`fork`方法和`Thread`的`start`方法是类似的。这种“偷任务”的专业名词叫[工作窃取(work-stealing)算法](https://blog.csdn.net/pange1991/article/details/80944797)，利用JDK7提供的`ForkJoinPool`就可以实现啦。
+`RecursiveTask`的`fork`方法和`Thread`的`start`方法是类似的。这种“偷任务”的专业名词叫[工作窃取(work-stealing)算法](https://blog.csdn.net/pange1991/article/details/80944797)，利用JDK7提供的`ForkJoinPool`就可以实现啦。在JDK7之前，`LinkedBlockingDeque`用的也是 *工作窃取算法* 。
 
 # 测试
 
