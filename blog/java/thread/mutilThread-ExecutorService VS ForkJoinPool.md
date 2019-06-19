@@ -270,7 +270,7 @@ public class MutilThreadOfForkJoinPool implements Calculator {
 
         @Override
         protected Long compute() {
-            // 当需要计算的数字小于 1000000 时，直接计算结果
+            // 当需要计算的数字小于 10万 时，直接计算结果
             if (end - start < 1000000) {
                 long total = 0;
 
@@ -295,7 +295,7 @@ public class MutilThreadOfForkJoinPool implements Calculator {
 }
 ```
 
-`RecursiveTask`的`fork`方法和`Thread`的`start`方法是类似的。其实`ForkJoinPool`的本质就是递归。
+`RecursiveTask`的`fork`方法和`Thread`的`start`方法是类似的。这种“偷任务”的专业名词叫[工作窃取(work-stealing)算法](https://blog.csdn.net/pange1991/article/details/80944797)，利用JDK7提供的`ForkJoinPool`就可以实现啦。
 
 # 测试
 
@@ -366,10 +366,21 @@ public class ThreadTest {
 1. 一般我们使用多线程时会用`ExecuterService`，构造用`new ThreadPoolExecutor()`，一般不使用`Executors`提供了构造线线程池方法，避免出现OOM；
 2. 线程池相对于线程组(本文没提到)更好管理；
 3. 在JDK7之后可以用`ForkJoinPool`，相对于`ExecuterService`执行效率更快。
+4. 线程之间通信是需要成本的。<br> 如果你细心的话，会发现上面的示例代码中都有这么两行多余的代码：
+
+```java
+// 此句代码只是为了延长程序运行时间，和程序逻辑无关
+List<SumTask> tasks = new ArrayList<SumTask>();
+
+// 此句代码只是为了延长程序运行时间，和程序逻辑无关
+tasks.add(new SumTask());
+```
+如果不加创建对象的多余代码，只是单纯累加数组的和，你会发现单线程执行效率更高。所以在实际使用中还是要根据实际业务逻辑对比，选取适合的方式。如果业务逻辑很简单，程序处理跟快，就完全没有必要使用多线程了。<br> 在`ForkJoinPool`中，设置的数组大小是10万，之所以设置这个数字，是为了跟 `ExecutorService` 方式做对比，如果在`ForkJoinPool`中设置的数组长度过小，就会出现性能不如 `ExecutorService` 的情况。
+
 
 ---
 
-程序中用到的自定义类
+程序中用到的生成计算数据的类
 
 ```java
 package mutilthread;
