@@ -110,7 +110,7 @@ public class MutilThreadOfThreadPoolExecutor implements Calculator {
     @Override
     public long sumUp(int[] calcData) throws Exception {
         // 创建线程池
-        ExecutorService executorService = new ThreadPoolExecutor(5, 10, // 线城数
+        ExecutorService executorService = new ThreadPoolExecutor(5, 10, // 线程数
                 60l, TimeUnit.SECONDS,  // 超时时间
                 new ArrayBlockingQueue<Runnable>(100, true),  // 线程处理数据的方式
                 Executors.defaultThreadFactory(),  // 创建线程的工厂
