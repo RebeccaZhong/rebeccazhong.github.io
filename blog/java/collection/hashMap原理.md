@@ -1,0 +1,3 @@
+- [HashMap原理及源码分析](https://mp.weixin.qq.com/s/T4bGAEhGxKRC_TLBPD0mJQ)
+- [HashMap实现原理解读](https://mp.weixin.qq.com/s/cBs8goKd3LNMFtix8c1A9A)
+- [HashMap, ConcurrentHashMap 原理及源码，一次性讲清楚！](https://mp.weixin.qq.com/s?__biz=MzI3ODcxMzQzMw==&mid=2247487963&idx=1&sn=e2a492f26825457034476a85aa41db64&chksm=eb5394eddc241dfb269abf637e3fd841cf782034945970599449fbf1fdcb31d234574dc33d75&scene=21#wechat_redirect)

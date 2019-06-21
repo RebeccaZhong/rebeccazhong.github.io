@@ -1,0 +1,4 @@
+- [CAP理论与分布式系统设计](https://mp.weixin.qq.com/s/gV7DqSgSkz_X56p2X_x_cQ)
+- [分布式CAP理论](https://mp.weixin.qq.com/s/xcWBJsYyl_QYc74bo37egw)
+- [一篇文章搞清楚什么是分布式系统 CAP 定理](https://mp.weixin.qq.com/s/H_LaiTCXkdqFUI8xX3B2tA)
+- [大数据开发者应该知道的分布式系统 CAP 理论](https://mp.weixin.qq.com/s/sDySngjaT5zwReJvgv3QGA)
