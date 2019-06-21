@@ -1,4 +1,4 @@
-- [详解 Java 中 4 种 I/O 模型 ](https://mp.weixin.qq.com/s?__biz=MzI3ODcxMzQzMw==&mid=2247488064&idx=2&sn=56b6f87cb4e99107737c73f7ed1e5e8e&chksm=eb539776dc241e60f88f7185da4b7fb46bf41f10a66a53898ca672e8942e8b6a8d47ec7d3d3d&scene=21#wechat_redirect)
+- [详解 Java 中 4 种 I/O 模型 ](https://mp.weixin.qq.com/s/9eEwiNuV78Y48bsvVW5sNQ)
 - [多路复用IO内幕](https://mp.weixin.qq.com/s/qMxjN73eb02vdgi1nyaqCw)
 - [IO多路复用](https://mp.weixin.qq.com/s/EUBSIA_As4E_p-It7GIpOw)
 - [IO模式和IO多路复用](https://mp.weixin.qq.com/s/PEa91dubLQbgtMR91qWfgg)
