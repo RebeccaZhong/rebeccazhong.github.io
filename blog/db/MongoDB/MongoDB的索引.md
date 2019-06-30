@@ -3,6 +3,7 @@
 
 ### 原因：
 ![原因](https://raw.githubusercontent.com/RebeccaZhong/markdown-photos/master/%E4%B8%93%E4%B8%9A%E6%8A%80%E8%83%BD/db/MongoDB/MongoDB%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98-2.png)
+[参考地址](https://cloud.tencent.com/developer/article/1185064)
 
 
 ### 解决：
