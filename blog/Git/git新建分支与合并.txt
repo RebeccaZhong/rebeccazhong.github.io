@@ -27,7 +27,11 @@
 
 git添加远程仓库：
   git remote add [远程仓库别名] [远程仓库地址]
+
+允许远程仓库使用原仓库的历史日志：
   git pull [远程仓库别名] master --allow-unrelated-histories
+
+推送到远程仓库：
   git push [远程仓库别名] [远程仓库分支]
   
 删除指定的远程仓库：
